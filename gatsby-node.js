@@ -11,24 +11,6 @@ exports.onCreateNode = async ({
   const { createNode } = actions
   
   if (node.internal.type === "StrapiProducts") {
-    if (node.Media.length > 0) {
-      const ProductImages = await Promise.all(
-        node.Media.map(el =>
-          createRemoteFileNode({
-            url: `${el.url}`,
-            parentNodeId: node.id,
-            store,
-            cache,
-            createNode,
-            createNodeId,
-          })
-        )
-      )
-  
-      node.Media.forEach((node, i) => {
-        node.localFile___NODE = ProductImages[i].id
-      })
-    }
 
     if (node.ColorVariant.length > 0) {
       // Map ColorVariants Objects (2 in Total)
@@ -61,17 +43,16 @@ exports.onCreateNode = async ({
       //Returns result of ColorVariantImages Promise in console
       console.log(ColorVariantImages)
       
-      VariantMedia.forEach((node, i) => {
-        console.log("Product - " + i)
-        VariantMedia[i].Media.forEach((Media, i) => {
-            console.log("Item - " + i)
+      VariantMedia.forEach((item, i) => {
+        VariantMedia[i].Media.forEach((Mediaa, i) => {
+            Mediaa.localFile___NODE = ColorVariantImages[i].id
         })
       })
 
       //Gives localfile to Media in the FIRST object[0]
-      VariantMedia[0].Media.forEach((node, i) => {
-        node.localFile___NODE = ColorVariantImages[i].id
-      })
+      //VariantMedia[0].Media.forEach((node, i) => {
+      //  node.localFile___NODE = ColorVariantImages[i].id
+      //})
 
     }
 
