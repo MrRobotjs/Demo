@@ -19,40 +19,40 @@ exports.onCreateNode = async ({
       })
 
       //Returns Array of Objects
-      console.log(VariantMedia);
-
-      //Returns the ID of the FIRST Media[0] inside FIRST VariantMedia[0]
-      console.log(VariantMedia[0].Media[0].id + " - log")
+      console.log(VariantMedia + "\n");
 
       const ColorVariantImages = await Promise.all(
         
-        //Maps Media from the FIRST Object from VariantMedia[0]
-        VariantMedia[0].Media.map(el2 =>
-          createRemoteFileNode({
-            url: `${el2.url}`, //Downloads image from url so it can be used locally by gatsby-image
-            parentNodeId: node.id,
-            store,
-            cache,
-            createNode,
-            createNodeId,
-          })
+        VariantMedia.map(el2 =>
+          //Maps Media from the FIRST Object from VariantMedia[0]
+          el2.Media.map(el2 =>
+            createRemoteFileNode({
+              url: `${el2.url}`, //Downloads image from url so it can be used locally by gatsby-image
+              parentNodeId: node.id,
+              store,
+              cache,
+              createNode,
+              createNodeId,
+            })
+          )
         )
         
       )
       
       //Returns result of ColorVariantImages Promise in console
       console.log(ColorVariantImages)
-      
-      VariantMedia.forEach((item, i) => {
-        VariantMedia[i].Media.forEach((Mediaa, i) => {
-            Mediaa.localFile___NODE = ColorVariantImages[i].id
+
+      VariantMedia.forEach((node, i) => {
+        console.log("\nProduct - " + i)
+        VariantMedia[i].Media.forEach((Media, i) => {
+            console.log("Item - " + i)
         })
       })
 
       //Gives localfile to Media in the FIRST object[0]
-      //VariantMedia[0].Media.forEach((node, i) => {
-      //  node.localFile___NODE = ColorVariantImages[i].id
-      //})
+      VariantMedia[0].Media.forEach((node, i) => {
+        node.localFile___NODE = ColorVariantImages[0].id
+      })
 
     }
 
